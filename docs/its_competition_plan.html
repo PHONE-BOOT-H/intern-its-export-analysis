@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개도국 교통·ITS 수출 경쟁 지형 분석 — 뭘, 이미 있나, 의미있나</title>
+<style>
+  :root{--ink:#1a1d24;--muted:#5b6472;--line:#e2e6ec;--bg:#fff;--soft:#f5f7fa;
+    --accent:#0f766e;--accent-soft:#e6f2f0;--warn:#8a5a00;--warn-soft:#fbf3e3;--red:#b3261e;--red-soft:#fbeceb}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.65;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:52px 24px 100px}
+  header.top{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:36px}
+  .kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 10px}
+  h1{font-size:28px;line-height:1.25;margin:0 0 12px;letter-spacing:-.01em}
+  .lede{font-size:17px;color:var(--muted);margin:0}
+  h2{font-size:20px;margin:46px 0 14px;letter-spacing:-.01em}
+  h2 .n{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:9px}
+  h3{font-size:15.5px;margin:22px 0 7px}
+  p{margin:0 0 13px}
+  strong{font-weight:650}
+  .muted{color:var(--muted)}
+  code{background:var(--soft);padding:1px 6px;border-radius:5px;font-size:.9em;font-family:"SF Mono",Consolas,monospace}
+  .card{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
+  .warn{background:var(--warn-soft);border-color:#efdcb5}.warn b{color:var(--warn)}
+  .big{background:var(--accent-soft);border-color:#cfe6e1}
+  .flow{display:flex;flex-wrap:wrap;gap:0;margin:20px 0}
+  .step{flex:1;min-width:110px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 11px;text-align:center}
+  .step .t{font-weight:650;font-size:13.5px;margin-bottom:3px}.step .d{font-size:12px;color:var(--muted);line-height:1.4}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:19px;padding:0 4px;font-weight:700}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.03em;text-transform:uppercase}
+  tr:last-child td{border-bottom:none}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.ok{color:var(--accent);font-weight:650;white-space:nowrap}
+  .kr{background:var(--accent-soft)} .cn{background:var(--red-soft)}
+  .verdict{display:inline-block;font-size:12.5px;font-weight:700;padding:3px 11px;border-radius:20px;background:var(--accent-soft);color:var(--accent);border:1px solid #cfe6e1}
+  .timeline{margin:16px 0;border-left:2px solid var(--line)}
+  .wk{position:relative;padding:0 0 20px 24px}
+  .wk::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid #fff}
+  .wk:last-child{padding-bottom:0}.wk .h{font-weight:650;margin-bottom:2px}.wk .s{font-size:13.5px;color:var(--muted)}
+  .src{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);margin-top:50px;padding-top:18px}
+  .src a{color:var(--muted)}
+  .meta{font-size:13px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <p class="kicker">인턴 한 달 프로젝트 · 결정 문서</p>
+  <h1>개도국 교통·ITS 수출 경쟁 지형 분석</h1>
+  <p class="lede">공개 낙찰 데이터로 "개도국 교통·ITS 사업을 어느 나라가 따가나 — 한국은 어디 있나"를 분석하는 자체완결 프로젝트. 라이브 도구가 아니라 <strong>재현 가능한 분석 + 대시보드 + 전략 브리프.</strong></p>
+  <p class="meta">이미 데이터로 한 번 돌려서 검증됨(아래 3번). "라이브 자동 도구"는 포기하고 정적 분석으로 확정한 버전(A′).</p>
+</header>
+
+<h2><span class="n">1</span>뭘 하려는가</h2>
+<p>공개된 <strong>ADB·World Bank 낙찰 데이터</strong>(누가 어떤 사업을 수주했는지, 계약자 국적·금액·부문 포함)를 받아서, 교통·ITS 부문만 골라 <strong>"공급자국 리그테이블"</strong>을 만든다. 그걸로 한국의 경쟁 위치, 중국의 지배력, 시계열 추세, 어느 나라에 딜이 뜨는지를 본다.</p>
+<div class="flow">
+  <div class="step"><div class="t">공개 낙찰데이터</div><div class="d">ADB·WB (오픈 라이선스)</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">교통·ITS 필터</div><div class="d">부문·하위부문으로 추림</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">국적별 집계</div><div class="d">누가 따가나 · 점유율</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">대시보드·브리프</div><div class="d">추세 + 전략 발견</div></div>
+</div>
+<p class="muted" style="font-size:14px">전부 <strong>공개 오픈데이터</strong> — 회사 내부 자료는 한 줄도 안 씀(유출 위험 0).</p>
+
+<h2><span class="n">2</span>이건 이미 있나? (정직하게)</h2>
+<p><strong>비슷한 건 있고, 똑같은 건 못 찾았다.</strong></p>
+<ul>
+  <li><strong>있는 것</strong>: "중국이 MDB 조달을 지배한다"는 <strong>일반 현상</strong>은 학계·싱크탱크가 이미 다뤘다(CGD, Oxford의 일대일로 조달 연구). ITS 시장규모 리포트(ETRI 등)도 있다. 즉 <strong>현상 자체는 새롭지 않다.</strong></li>
+  <li><strong>못 찾은 것</strong>: "한국의 ITS 수출 경쟁 위치를 개도국 MDB 낙찰로, 재현 가능하게, 대시보드로" 본 건 안 나온다. 한국어 검색도 "한·중 ITS 수출 경쟁력 직접 비교 데이터 없음"으로 나왔다.</li>
+</ul>
+<div class="card">
+  <p style="margin:0"><strong>그래서 가치는 "세상에 없는 발견"이 아니라 "내가 직접, 특정 앵글로, rigor 있게 했다"에 있다.</strong> 포트폴리오는 문제의 참신성이 아니라 실행력으로 평가된다 — 일반 주제라도 내가 재현 가능하게 분석해 진짜 발견을 뽑으면 그게 신호다.</p>
+</div>
+
+<h2><span class="n">3</span>진짜 발견 — 이미 데이터로 검증함</h2>
+<p class="muted" style="font-size:14px">제안이 아니라, ADB 공개 낙찰데이터(2016–2026, 12,737건·$34.7B)를 실제로 돌린 결과다.</p>
+
+<h3>개도국 교통 전체 — 계약자국 TOP</h3>
+<table>
+  <tr><th>순위</th><th>계약자국</th><th class="num">금액$M</th><th class="num">점유</th></tr>
+  <tr class="cn"><td>1</td><td>중국</td><td class="num">9,481</td><td class="num">27.3%</td></tr>
+  <tr><td>2</td><td>인도 <span class="muted">(대부분 자국업체)</span></td><td class="num">8,669</td><td class="num">25.0%</td></tr>
+  <tr><td>3</td><td>필리핀 <span class="muted">(자국)</span></td><td class="num">2,657</td><td class="num">7.7%</td></tr>
+  <tr class="kr"><td>4</td><td><strong>한국</strong></td><td class="num">2,553</td><td class="num">7.4%</td></tr>
+  <tr><td>16</td><td>일본</td><td class="num">238</td><td class="num">0.7%</td></tr>
+</table>
+<p class="muted" style="font-size:14px">자국업체(인도·필리핀)를 빼면 <strong>수출국 중 중국·한국이 1·2위.</strong> 한국 교통 수출, 생각보다 세다.</p>
+
+<h3>그런데 ITS 니치(교통관리)만 떼면 — 반전</h3>
+<table>
+  <tr><th>순위</th><th>계약자국</th><th class="num">금액$M</th><th class="num">점유</th></tr>
+  <tr class="cn"><td>1</td><td>중국</td><td class="num">1,303</td><td class="num">54.4%</td></tr>
+  <tr><td>2</td><td>필리핀 <span class="muted">(자국)</span></td><td class="num">598</td><td class="num">25.0%</td></tr>
+  <tr><td>3</td><td>베트남</td><td class="num">184</td><td class="num">7.7%</td></tr>
+  <tr class="kr"><td>14</td><td><strong>한국</strong></td><td class="num">10</td><td class="num">0.4%</td></tr>
+</table>
+<div class="card big">
+  <p style="margin:0"><strong>발견: 한국은 일반 교통 수출은 4위인데, 정작 밀려는 ITS 니치에선 14위로 사실상 없다. 중국이 54%를 먹는다.</strong> 부서의 발주 목록(게시판)으론 절대 안 보이는, 데이터로만 나오는 전략적 공백.</p>
+</div>
+
+<div class="card warn">
+  <p style="margin:0 0 6px"><b>단, 여기서 정직해야 함(= 이게 이번 달 진짜 분석):</b></p>
+  <p style="margin:0">검색에 따르면 중국은 MDB에서 <strong>토목(works)은 지배하지만 장비·컨설팅은 미미(장비 3%)</strong>다. 그럼 이 "ITS 니치 54%"는 <strong>ITS 기술이 아니라 도로공사(works)</strong>일 가능성이 크다. "교통관리" 하위부문에 도로 건설이 섞여 있기 때문. → <strong>이번 달의 핵심 작업 = works/goods/consulting을 분리</strong>해서 "중국이 정말 ITS 기술을 먹는가, 아니면 도로공사만 먹는가"를 가려내는 것. 이 구분을 해내는 게 rigor 그 자체다.</p>
+</div>
+
+<h2><span class="n">4</span>진짜 하면 의미있나? (양쪽 다)</h2>
+<table>
+  <tr><th>의미 있는 이유</th><th>정직한 한계</th></tr>
+  <tr>
+    <td>데이터로 <strong>비자명한 전략 발견</strong>이 실제로 나옴(중국 ITS 지배 vs 한국 실종)</td>
+    <td>ADB <strong>한 곳만</strong> — WB·양자원조 빼면 그림 달라질 수 있음</td>
+  </tr>
+  <tr>
+    <td>부서가 <strong>브리핑에 쓸 만한</strong> 경쟁 인텔(게시판엔 없는 뷰)</td>
+    <td>ITS 니치는 <strong>636건 소표본</strong> — 방향성이지 정밀치 아님</td>
+  </tr>
+  <tr>
+    <td><strong>rigor 훈련</strong>: works/goods 분리, 등록지≠원산지, 결측 처리 — baram에서 못 한 "데이터가 뭘 말할 수 있나"</td>
+    <td><strong>정적 분석</strong>(라이브 도구 아님). 조직이 실제 채택할지는 미확인</td>
+  </tr>
+</table>
+<p><strong>결론</strong>: 1차 가치는 <strong>포트폴리오·스킬</strong>이고, "브리핑용 인텔"이라는 조직 쓸모는 보너스다. 과대평가 안 함. 그래도 <span class="verdict">할 값어치 있음</span> — 진짜 발견이 나오고, 배울 rigor가 명확하고, 유출 위험이 없으니까.</p>
+
+<h2><span class="n">5</span>내가 걸었던 조건들</h2>
+<table>
+  <tr><td>교통/ITS 도메인</td><td class="ok">O</td></tr>
+  <tr><td>이미 있는 거 아님(이 앵글·실행)</td><td class="ok">O — 일반현상은 있으나 이 분석은 white space</td></tr>
+  <tr><td>진짜 의미(발견이 나옴)</td><td class="ok">O — 검증됨</td></tr>
+  <tr><td>유출 위험</td><td class="ok">없음 — 전부 공개 오픈데이터</td></tr>
+  <tr><td>프로토타입 + 디자인</td><td class="ok">O — 대시보드</td></tr>
+  <tr><td>1등급 rigor 스킬</td><td class="ok">O — works/goods 분리·caveat</td></tr>
+  <tr><td>혼자 한 달</td><td class="ok">O</td></tr>
+</table>
+
+<h2><span class="n">6</span>한 달 계획</h2>
+<div class="timeline">
+  <div class="wk"><div class="h">1주 — 데이터 확정 + 핵심 분리</div><div class="s">ADB에 WB 낙찰 합치고, works/goods/consulting 분리. "중국이 ITS 기술을 먹나, 도로공사만 먹나" 판정.</div></div>
+  <div class="wk"><div class="h">2주 — 시계열·지역 분석</div><div class="s">중국 점유가 커지나? 어느 개도국에 ITS 딜이 뜨나? 한국이 이긴 소수 사례는 뭐가 달랐나?</div></div>
+  <div class="wk"><div class="h">3주 — 대시보드 + 재현 파이프라인</div><div class="s">다운로드→정제→집계→시각화 자동화(git·재현성). 디자인.</div></div>
+  <div class="wk"><div class="h">4주 — 전략 브리프</div><div class="s">"한국은 왜 ITS 수출 니치에서 지나, 어디에 기회가 있나"를 caveat와 함께 정리.</div></div>
+</div>
+
+<h2><span class="n">7</span>다음 한 걸음</h2>
+<p><strong>락 → 레포 세팅(git) → 이 검증 스파이크(<code>analyze_adb.py</code>)를 첫 커밋 → 1주차(WB 합치기 + works/goods 분리) 시작.</strong></p>
+
+<p class="src">근거 —
+<a href="https://www.cgdev.org/blog/world-bank-procurement-rules-and-chinese-contractors">CGD: WB Procurement &amp; Chinese Contractors</a> ·
+<a href="https://academic.oup.com/wbro/article/36/2/131/6280090">Public Procurement &amp; the Belt and Road (World Bank Research Observer)</a> ·
+<a href="https://data.adb.org/dataset/operational-procurement-database">ADB Operational Procurement Database (원자료, 오픈 라이선스)</a> ·
+<a href="https://financesone.worldbank.org/eds03-contract-awards-in-investment-project-financing/DS01693">WB Contract Awards (financesone)</a>
+</p>
+
+</div>
+</body>
+</html>

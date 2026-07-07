@@ -68,9 +68,12 @@ logs/
 # ============================
 # 캡스톤 프로젝트 특화
 # ============================
-# 원본 데이터 (NVIDIA Personas 등 큰 파일, git에 부적합)
-data/raw/
+# 원본 데이터 (큰 공개데이터 파일, git에 부적합). 출처 README는 남긴다.
+data/raw/*
+!data/raw/README.md
 data/external/
+data/processed/*
+!data/processed/.gitkeep
 data/*.csv
 data/*.json
 !data/sample/
