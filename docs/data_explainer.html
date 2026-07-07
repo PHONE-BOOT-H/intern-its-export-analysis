@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터가 뭐고, 어떻게 생겼고, 뭘 할 건지</title>
+<style>
+  :root{--ink:#1a1d24;--muted:#5b6472;--line:#e2e6ec;--bg:#fff;--soft:#f5f7fa;
+    --accent:#0f766e;--accent-soft:#e6f2f0;--blue:#1d4ed8;--blue-soft:#e8effd;--red:#b3261e;--red-soft:#fbeceb}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:52px 24px 100px}
+  header.top{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:32px}
+  .kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 10px}
+  h1{font-size:27px;line-height:1.25;margin:0 0 10px}
+  .lede{font-size:17px;color:var(--muted);margin:0}
+  h2{font-size:21px;margin:44px 0 6px}
+  h2 .n{display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;background:var(--accent);color:#fff;border-radius:8px;font-size:16px;margin-right:10px;vertical-align:middle}
+  h3{font-size:15px;margin:20px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  p{margin:0 0 12px}
+  strong{font-weight:650}
+  .muted{color:var(--muted)}
+  .lead-in{font-size:16px;margin:2px 0 14px}
+  code{background:var(--soft);padding:1px 6px;border-radius:5px;font-size:.88em;font-family:"SF Mono",Consolas,monospace}
+  .card{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .accent{background:var(--accent-soft);border-color:#cfe6e1}
+  .two{display:flex;gap:14px;flex-wrap:wrap;margin:16px 0}
+  .col{flex:1;min-width:250px;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .col.blue{background:var(--blue-soft);border-color:#c7d7f7}
+  .col.red{background:var(--red-soft);border-color:#f2d0cd}
+  .col h4{margin:0 0 4px;font-size:16px}
+  .col .q{font-size:14px;color:var(--muted);margin:0}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11.5px;letter-spacing:.02em;text-transform:uppercase;background:var(--soft)}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .row-ex td{font-size:13px}
+  .glo td:first-child{font-weight:650;white-space:nowrap;width:150px}
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:16px 0}
+  .step{flex:1;min-width:100px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 10px;text-align:center}
+  .step .t{font-weight:650;font-size:13px;margin-bottom:2px}.step .d{font-size:11.5px;color:var(--muted);line-height:1.35}
+  .arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px;padding:0 3px;font-weight:700}
+  .hl{background:#fff4cc;padding:0 3px;border-radius:3px}
+  .done{color:var(--accent);font-weight:650}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <p class="kicker">데이터 설명서 · 완전 쉬운 버전</p>
+  <h1>우리가 쓰는 데이터가 뭐고, 어떻게 생겼고, 뭘 할 건지</h1>
+  <p class="lede">공개 데이터 두 개로 질문 두 개에 답한다. 아래는 실제 데이터에서 뽑은 진짜 예시다.</p>
+</header>
+
+<div class="two">
+  <div class="col blue">
+    <h4>데이터 1 · ADB 낙찰</h4>
+    <p class="q">질문: 개도국 교통사업 계약을 <strong>누가 따갔나?</strong></p>
+  </div>
+  <div class="col red">
+    <h4>데이터 2 · AidData 중국</h4>
+    <p class="q">질문: 중국 돈이 <strong>어느 나라 교통에 흘렀나?</strong></p>
+  </div>
+</div>
+
+<h2><span class="n">1</span>데이터 1: ADB 낙찰</h2>
+<p class="lead-in">아시아개발은행(ADB)이 개도국 교통사업에 돈을 대면, 그 계약을 <strong>어느 나라 회사가 따냈는지</strong>를 다 공개한 표. 전체 82,759건, 그중 교통이 12,737건.</p>
+
+<h3>한 줄 = 계약 하나. 실제 예시</h3>
+<table class="row-ex">
+  <tr><th>연도</th><th>사업 발주국</th><th>계약 딴 나라</th><th>종류</th><th>세부분야</th><th class="num">금액</th><th>사업명</th></tr>
+  <tr><td>2019</td><td>조지아</td><td>중국</td><td>WORKS<br><span class="muted">(공사)</span></td><td>도로(비도시)</td><td class="num">$258M</td><td>남북회랑 도로</td></tr>
+  <tr><td>2017</td><td>인도</td><td>한국</td><td>WORKS<br><span class="muted">(공사)</span></td><td>도로(비도시)</td><td class="num">$428M</td><td>비하르 갠지스 대교</td></tr>
+  <tr style="background:#fff4cc"><td>2025</td><td>필리핀</td><td>필리핀</td><td>WORKS<br><span class="muted">(공사)</span></td><td>도시도로·<strong>교통관리</strong></td><td class="num">$393M</td><td>라구나 호안 도로망</td></tr>
+</table>
+<p class="muted" style="font-size:14px">맨 아래 줄을 봐. "교통관리(traffic management)" 분야인데 실제론 <span class="hl">도로망 공사(WORKS)</span>다. ITS 기술이 아니라 길을 까는 거야. 이게 "ITS 니치의 86%가 공사"라는 말의 실체.</p>
+
+<h3>핵심 칸 뜻 (이것만 알면 됨)</h3>
+<table class="glo">
+  <tr><td>계약 딴 나라<br><span class="muted">NATIONALITY</span></td><td>누가 이 계약을 따갔나. <strong>우리 분석의 주인공.</strong> 이걸 나라별로 세면 "누가 따가나" 리그테이블.</td></tr>
+  <tr><td>종류<br><span class="muted">NATURE OF PROCUREMENT</span></td><td><strong>WORKS</strong>(공사=길·다리) / <strong>GOODS</strong>(장비) / <strong>CONSULTING</strong>(설계·감리). ITS 기술은 GOODS·CONSULTING 쪽. 공사를 빼야 진짜 ITS가 보임. <strong>ITS 판별의 열쇠.</strong></td></tr>
+  <tr><td>세부분야<br><span class="muted">SUBSECTOR</span></td><td>"도시도로·교통관리" 같은 분류. ITS에 가장 가까운 게 "교통관리"지만, 위에서 봤듯 그 안에 공사가 섞여 있음.</td></tr>
+  <tr><td>금액<br><span class="muted">ADB-FINANCED AMOUNT</span></td><td>계약 금액(달러). 나라별로 합쳐 점유율을 냄.</td></tr>
+  <tr><td>발주국 / 연도</td><td>어느 나라 사업이고 언제인지. 지역·시계열 분석에 씀.</td></tr>
+</table>
+<p class="muted" style="font-size:14px">같은 데이터의 "원산지(by Origin)" 버전도 있어. 계약 딴 나라가 등록지 기준이라 부정확할 수 있는데, 원산지 버전으로 대조해서 바로잡는 용도.</p>
+
+<h2><span class="n">2</span>데이터 2: AidData 중국</h2>
+<p class="lead-in">미국 연구기관(AidData)이 <strong>중국이 전 세계 개도국에 뿌린 돈</strong>(차관·원조) 20,985건을 정리한 표. 교통(코드 210)이 1,665건.</p>
+
+<h3>한 줄 = 중국 개발금융 하나. 실제 예시</h3>
+<table class="row-ex">
+  <tr><th>돈 받은 나라</th><th>연도</th><th>형태</th><th class="num">금액</th><th>내용</th></tr>
+  <tr><td>가나</td><td>2010</td><td>Loan<br><span class="muted">(차관)</span></td><td class="num">$14.5B</td><td>중국 수출입은행 양허성 차관</td></tr>
+  <tr><td>아르헨티나</td><td>2010</td><td>Loan<br><span class="muted">(차관)</span></td><td class="num">$13.9B</td><td>철도 투자 협정</td></tr>
+</table>
+<p class="muted" style="font-size:14px">금액을 봐. <span class="hl">조 단위(billion)</span>야. ADB 계약은 억 단위(million)였지. 중국의 개도국 교통 돈은 MDB가 아니라 <strong>자기 차관(BRI)</strong>으로 나가. 스케일이 다른 판이라, 이걸 안 보면 그림이 반쪽이야.</p>
+
+<h3>핵심 칸 뜻</h3>
+<table class="glo">
+  <tr><td>받은 나라<br><span class="muted">Recipient</span></td><td>중국 돈이 흘러간 개도국.</td></tr>
+  <tr><td>형태<br><span class="muted">Flow Type</span></td><td>Loan(차관) / Grant(무상) 등. 대부분 차관.</td></tr>
+  <tr><td>분야코드<br><span class="muted">Sector Code</span></td><td>숫자 코드. <strong>210 = 교통</strong>(Transport). 이걸로 교통만 뽑음.</td></tr>
+  <tr><td>금액 / 연도</td><td>얼마를 언제. 시계열로 "중국이 언제부터 세졌나"를 봄.</td></tr>
+</table>
+
+<h2><span class="n">3</span>두 데이터의 차이</h2>
+<table>
+  <tr><th></th><th>ADB 낙찰</th><th>AidData 중국</th></tr>
+  <tr><td>답하는 질문</td><td>누가 <strong>계약을 따나</strong></td><td>누가 <strong>돈을 대나</strong></td></tr>
+  <tr><td>한 줄의 단위</td><td>계약 1건</td><td>금융 프로젝트 1건</td></tr>
+  <tr><td>보는 나라</td><td>계약 딴 회사의 나라 (한·중·일 등)</td><td>중국만 (돈 준 쪽)</td></tr>
+  <tr><td>역할</td><td>낙찰 층 (누가 이기나)</td><td>재원 층 (돈이 어디로)</td></tr>
+</table>
+<p>둘을 겹치면 "MDB 계약에선 이런데, 중국 실제 돈은 저기로 간다"가 한눈에 보인다. 이게 부서 발주 게시판이 못 하는 것.</p>
+
+<h2><span class="n">4</span>그래서 뭘 하나</h2>
+<div class="flow">
+  <div class="step"><div class="t">원본</div><div class="d">data/raw의 표 3개</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">교통만 거름</div><div class="d">SECTOR=교통</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">공사/기술 분리</div><div class="d">WORKS 빼고 진짜 ITS</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">나라별 합계</div><div class="d">누가 따나 · 점유율</div></div>
+  <div class="arrow">→</div>
+  <div class="step"><div class="t">차트·브리프</div><div class="d">추세 + 발견</div></div>
+</div>
+
+<h3>진행 상황</h3>
+<table>
+  <tr><td class="done">완료</td><td>ADB로 교통 리그테이블 (한국 4위) + ITS를 공사/기술로 분해 (86%가 공사)</td></tr>
+  <tr><td class="muted">다음</td><td>WB 낙찰 합치기 · AidData 중국 교통(1,665건) 붙이기 · "교통관리" 안에서 진짜 ITS만 골라내는 키워드 검증 · 시계열 + 대시보드</td></tr>
+</table>
+
+<p class="muted" style="margin-top:28px;font-size:14px">한 줄 요약: <strong>ADB 표로 "누가 계약 따나", AidData 표로 "중국 돈 어디로 가나"를 보고, 공사와 ITS 기술을 갈라서 한국이 진짜 어디 있는지 그린다.</strong></p>
+
+</div>
+</body>
+</html>
