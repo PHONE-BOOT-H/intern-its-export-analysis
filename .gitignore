@@ -89,6 +89,9 @@ scratch/
 # 협회 내부 과제 메모 (범위 밖 · 포트폴리오 레포에 올리지 않음)
 새 텍스트 문서.txt
 
+# 회사 내부 자료 (회원사 목록 등). 공개 아님 → 절대 커밋 안 함.
+*.docx
+
 # Notion 백업 export
 notion-exports/
 
