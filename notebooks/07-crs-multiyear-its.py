@@ -67,10 +67,15 @@ print('판정 전파:', (cand['판정'] != '').sum(), '| 남은 눈검증 후보
 print('\n[남은 후보 연도별]');  print(todo['Year'].value_counts().sort_index().to_string())
 print('\n[남은 후보 공여국별 상위]');  print(todo['DonorName'].value_counts().head(12).to_string())
 
-out = cand.drop(columns=['blob'])
-out = out.sort_values(['판정', 'Year']).reset_index(drop=True)
-out.to_csv('data/processed/crs_multiyear_its_review.csv', index=False, encoding='utf-8-sig')
-print('\n저장: data/processed/crs_multiyear_its_review.csv', len(out), '행')
+import os
+OUT = 'data/processed/crs_multiyear_its_review.csv'
+if os.path.exists(OUT):
+    print('\n주의:', OUT, '이미 있음 — 눈검증 판정 보호 위해 덮어쓰지 않음')
+else:
+    out = cand.drop(columns=['blob'])
+    out = out.sort_values(['판정', 'Year']).reset_index(drop=True)
+    out.to_csv(OUT, index=False, encoding='utf-8-sig')
+    print('\n저장:', OUT, len(out), '행')
 
 # 미리보기: 확정 O만으로 연도x공여국 (판정 전파분 — 최종 아님)
 o = cand[cand['판정'] == 'O']
