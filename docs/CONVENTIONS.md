@@ -35,22 +35,15 @@ reports/         결과물 (그림, 브리프)
 
 raw 데이터는 절대 수정하지 않는다. requirements 버전은 고정한다.
 
-## 커밋 (Conventional Commits)
+## 커밋
 
-형식: `type: 요약` (명령형, 소문자 시작, 끝에 마침표 없음). 왜 했는지는 본문에.
+영어, 명령형, 50자 이내, 마침표 없음. type 접두어(feat: 등) 안 씀.
+왜 했는지 설명이 필요하면 본문에. 트레일러(Co-Authored-By 등) 안 붙임.
 
-요약은 짧게, 한 것만. 부제·수식어·"— 설명" 꼬리 금지.
-나쁨: `feat: 전략 브리프 뼈대 초안 — 확정 숫자 채우고 구멍 6개로 남은 작업 고정`
-좋음: `feat: 브리프 뼈대 초안`
+Bad:  `feat: 전략 브리프 뼈대 초안 — 확정 숫자 채우고 구멍 6개로 남은 작업 고정`
+Good: `Add strategy brief skeleton`
 
-- feat  새 기능
-- fix   버그 수정
-- docs  문서
-- refactor  코드 정리
-- data  데이터 추가/갱신
-- chore 잡일
-
-예: `feat: ADB 낙찰 국적별 리그테이블 집계`
+예: `Validate CRS ITS false positives`, `Fix award country join`
 
 ## 계속 정리
 

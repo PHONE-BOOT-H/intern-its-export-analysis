@@ -100,3 +100,6 @@ notion-exports/
 # abewley/sort (GPL). 로컬에만 두고 학습 참조로만 사용.
 # ============================
 reference/
+
+# 개인 운영 규칙 (로컬 전용)
+CLAUDE.local.md
