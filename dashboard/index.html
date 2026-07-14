@@ -21,6 +21,7 @@
   body { margin:0; background:var(--bg); color:var(--ink);
          font-family:'Pretendard Variable', Pretendard, 'Apple SD Gothic Neo', sans-serif;
          font-size:17px; line-height:1.75; font-variant-numeric:tabular-nums;
+         word-break:keep-all; overflow-wrap:break-word;
          -webkit-font-smoothing:antialiased; }
   .serif { font-family:'Noto Serif KR', serif; }
   main { max-width:760px; margin:0 auto; padding:0 22px 40px; }
@@ -109,100 +110,111 @@
 
 <header class="hero">
   <div class="kicker">데이터 브리프 · 개도국 교통 ITS 수출 경쟁 지형 <b>2026.07</b></div>
-  <h1>한국 ITS 수출, 싸울 곳은<br>MDB 입찰장이 아니라 <em>양자 채널</em>이다</h1>
-  <p class="dek">ADB 낙찰 · OECD CRS · AidData 중국 개발금융 · ITS Korea 수출실적 — 공개 데이터
-  4개 층을 쌓아 재현 가능하게 증명한다. MDB 검증은 현재 ADB 낙찰 기준이다.</p>
+  <h1>한국 ITS 수출의 실제 무대는 국제기구 입찰이 아니라 <em>정부 간 협력</em>이다</h1>
+  <p class="dek">개도국 지능형교통체계(ITS) 사업은 어디서 발주되고, 누가 따내고 있는가.
+  국제개발은행 낙찰 기록, 각국 원조 신고 통계, 중국 개발금융 데이터, 한국 수출실적 —
+  네 가지 공개 데이터로 확인했다. 모든 수치는 공개 코드로 재현할 수 있다.</p>
 </header>
 
 <div class="stats fade">
-  <div class="stat"><div class="num" id="kpi1"></div><div class="lab">ADB 교통관리 니치 636건 중 ITS 키워드 낙찰 — works 0건, 전부 컨설팅·장비</div></div>
-  <div class="stat"><div class="num" id="kpi2"></div><div class="lab">CRS 양자 원조 10년(2014–23) 한국 ITS 신고 행수 — 2018년 이후 매년 최다</div></div>
-  <div class="stat"><div class="num" id="kpi3"></div><div class="lab">중국이 22년간 실제 집계한 ITS 사업 — 교통 1,665건 중</div></div>
+  <div class="stat"><div class="num" id="kpi1"></div><div class="lab">아시아개발은행 교통관리 분야 636건 중 ITS 이름이 걸린 낙찰. 시스템 구축은 한 건도 없다</div></div>
+  <div class="stat"><div class="num" id="kpi2"></div><div class="lab">최근 10년(2014–23) 원조 통계에 신고된 한국 ITS 사업 기록. 2018년부터 매년 가장 많다</div></div>
+  <div class="stat"><div class="num" id="kpi3"></div><div class="lab">중국이 22년간 개도국 교통 1,665건을 지원하며 실제 집행한 ITS 사업의 수</div></div>
 </div>
 
 <section class="fade">
-  <div class="sec-kicker">1 — MDB 입찰장</div>
-  <h2>한국은 강하다. 그런데 ITS가 없다</h2>
-  <p>ADB 교통 낙찰(계약일 2016.1–2026.5)을 국적별로 모으면 첫 착시가 나온다. 낙찰의
-  <b>59.6%는 등록국=사업국인 안방 계약</b>이다. 안방을 걷어내면 순수 수출 리그가 남는다 —
-  중국이 절반, <b>한국이 2위($2.55B, 18.2%)</b>다. 토글로 직접 확인.</p>
+  <div class="sec-kicker">1 — 국제개발은행 입찰</div>
+  <h2>한국 기업은 잘 따내고 있다. 다만 ITS 사업이 나오지 않는다</h2>
+  <p>아시아개발은행(ADB)이 개도국 교통사업 계약을 어느 나라 기업에 줬는지, 2016년 1월부터
+  2026년 5월까지의 낙찰 기록을 모았다. 전체 금액의 <b>59.6%는 사업국 기업이 자국 사업을
+  수주한 국내 계약</b>이다. 이를 제외하고 국경을 넘어 수주한 계약만 보면 중국이 절반을
+  가져갔고, <b>한국이 두 번째($2.55B, 18.2%)</b>다.</p>
   <div class="toggle" id="tg1">
     <button data-v="all" class="on">전체 낙찰</button>
-    <button data-v="export">안방 제거 — 순수 수출</button>
+    <button data-v="export">국내 계약 제외</button>
   </div>
   <div id="c-adb" class="chart"></div>
-  <p class="caption">ADB 교통 부문 낙찰, ADB 재원 금액 기준 상위 10개 등록국. 출처: ADB procurement 공개 데이터.</p>
-  <p>그런데 한국이 잘 싸우는 이 시장에 ITS가 없다. 교통관리·신호류 서브섹터 636건은 금액의
-  86%가 도로공사(works)이고, 낙찰 건명에 ITS 키워드가 걸리는 계약은 <b>24건 — 전부
-  컨설팅·장비, works 0건</b>이다. ADB에서 ITS는 독립 시스템 패키지로 발주되지 않는다.</p>
-  <div class="note">"ITS가 없다"가 아니라 "이 방법으로는 안 보인다"다. ITS는 MDB 도로사업 안에
-  컴포넌트(신호·관제·요금징수)로 묻혀 들어가는 경우가 많아 낙찰 건명 키워드로는 원래 안 잡힌다.</div>
+  <p class="caption">ADB 교통 부문 낙찰, ADB 재원 금액 기준 상위 10개국. 출처: ADB procurement 공개 데이터.</p>
+  <p>다만 이 시장에서 ITS는 거의 발주되지 않는다. 교통관리·신호 분야로 분류된 636건 가운데
+  금액의 86%는 도로공사이고, 계약 이름에 ITS 관련 표현이 들어간 낙찰은 <b>24건</b>에
+  그친다. 그 24건도 모두 자문·장비 계약이며, ITS 시스템을 통째로 구축하는 발주는 없었다.</p>
+  <div class="note">이 수치는 "ITS 사업이 없다"기보다 "이 방식으로는 보이지 않는다"에 가깝다.
+  ITS는 도로사업 안에 신호·관제·요금징수 같은 부속 공정으로 포함되는 경우가 많아,
+  계약 이름만으로는 걸러지지 않는다.</div>
 </section>
 
 <section class="fade">
-  <div class="sec-kicker">2 — 양자 채널</div>
-  <h2>ITS가 실명으로 있고, 한국이 최다</h2>
-  <p>OECD CRS(양자 원조 신고)의 교통 부문 2014–2023년에서 ITS 사업을 찾았다. 키워드 후보
-  1,031행을 자동 오탐 필터와 전수 눈검증으로 걸러 <b>164행(고유 사업 66건)</b>을 확정했다.
-  한국은 2018년 이후 매년 행수 최다다.</p>
+  <div class="sec-kicker">2 — 정부 간 원조</div>
+  <h2>원조 통계에는 ITS가 이름을 걸고 등장한다. 가장 자주 나오는 나라가 한국이다</h2>
+  <p>각국 정부는 개도국 지원 내역을 OECD에 신고한다(CRS 통계). 이 통계의 교통 분야
+  2014–2023년치에서 ITS 사업을 골라냈다. 검색어에 걸린 1,031건을 자동 필터와 전수
+  수작업 검증으로 거른 결과 <b>164건(중복 제외 66개 사업)</b>이 남았다. 이 가운데
+  한국의 기록이 2018년 이후 매년 가장 많다.</p>
   <div id="c-crs-heat" class="chart"></div>
-  <p class="caption">연도 × 공여국 CRS 신고 행수(확정분). 소수 공여국 생략: EU 3행, 영국 1행.
-  행수는 신고 단위라 방향만 읽는다.</p>
-  <p>금액은 반대다. 10년 약정 <b>일본 $163M vs 한국 $37M</b>. 한국은 다건·소액(마스터플랜·연수·
-  기술지원), 일본은 소건·대액(고속도로 ITS 차관)이다.</p>
+  <p class="caption">연도 × 지원국별 신고 건수(확정분). 소수 지원국 생략: EU 3건, 영국 1건.
+  나라마다 신고 방식이 달라 건수는 추세 참고용이다.</p>
+  <p>금액 순위는 반대다. 10년 약정 기준 <b>일본 $163M, 한국 $37M</b>. 한국은 계획 수립·연수·
+  기술지원 같은 작은 사업을 여러 건, 일본은 고속도로 ITS 차관 같은 큰 사업을 몇 건
+  지원했다.</p>
   <div id="c-crs-amt" class="chart"></div>
-  <p class="caption">공여국별 10년 합계 — 신고 행수(막대, 좌축) vs 약정액 $M(점, 우축).
-  독일 $209M은 산시성 1건($189M)이 지배.</p>
+  <p class="caption">지원국별 10년 합계 — 신고 건수(막대, 좌축)와 약정액 $M(점, 우축).
+  독일 $209M은 중국 산시성 1건($189M)이 대부분을 차지한다.</p>
 </section>
 
 <section class="fade">
   <div class="sec-kicker">3 — 중국이라는 변수</div>
-  <h2>BRI 교통 재원에 집계되는 ITS는 사실상 없다</h2>
-  <p>CRS엔 중국이 없다. AidData(중국 해외개발금융 2000–2021) 교통 부문에 같은 기준을 적용하고,
-  키워드가 못 잡는 어휘까지 전수 스윕으로 감사했다. 스크롤로 좁혀보자.</p>
+  <h2>중국의 교통 지원금에서 ITS는 찾아보기 어렵다</h2>
+  <p>OECD 통계에는 중국이 빠져 있다. 그래서 중국의 개도국 지원을 추적하는 별도
+  데이터(AidData, 2000–2021)의 교통 분야 전체에 같은 기준을 적용했다. 아래는 1,665건이
+  걸러지는 과정이다.</p>
   <div id="funnel"></div>
-  <p>집계되는 4건은 전부 소액 그랜트(합계 $12.6M, 2021년 불변가), 성격은 CCTV·감시형이다.
-  대형 시도 2건은 둘 다 무산됐다 — "중국과 ITS에서 부딪힌다"는 걱정은 2021년까지의 이행
-  데이터에서는 뒷받침되지 않는다.</p>
+  <p>남은 4건은 모두 소규모 무상원조(합계 $12.6M, 2021년 불변가격)이고, 내용은 교차로
+  CCTV·신호등 설치다. 1억 달러 규모의 대형 ITS 계약이 두 번 추진됐지만 모두 성사되지
+  않았다. 적어도 2021년까지의 기록으로는, ITS 분야에서 중국과 정면으로 경쟁하는 구도는
+  확인되지 않는다.</p>
   <div class="cards" id="china-cards"></div>
 </section>
 
 <section class="fade">
-  <div class="sec-kicker">4 — 한국 실측</div>
-  <h2>원조는 소프트, 실적은 하드</h2>
-  <p>ITS Korea(ITS 국제협력센터) 수출통계 — 상업 계약 포함 <b>2006–2025 누적 687건, $1.98B,
-  77개국</b>. 금액의 94.8%가 구축사업(하드)이다. CRS에서 한국이 소프트(계획·표준·연수)로
-  잡히는 것과 대비된다. 원조 채널과 상업 채널이 분업하고 있을 가능성 — 아직 추측이며,
-  사례 추적 전이다.</p>
+  <div class="sec-kicker">4 — 한국의 실제 수출 실적</div>
+  <h2>원조에서는 계획을 팔고, 상업 계약에서는 시스템을 판다</h2>
+  <p>ITS 국제협력센터가 집계한 한국의 ITS 수출은 상업 계약을 포함해 <b>2006–2025년 누적
+  687건, $1.98B, 77개국</b>이다. 이 가운데 금액의 94.8%가 시스템 구축 사업이다. 앞서 본
+  원조 통계에서 한국이 주로 계획 수립·표준·연수로 등장한 것과 대비된다. 원조 단계에서
+  계획으로 들어가고 상업 계약에서 구축으로 이어지는 흐름일 수 있으나, 이는 아직
+  사례로 확인하지 못한 추정이다.</p>
   <div id="c-kr-annual" class="chart"></div>
-  <p class="caption">연도별 수출액 $M(막대)과 건수(선). 출처: ITS 국제협력센터 공개 API, 2026-07-14 조회. 업계 자기신고 집계.</p>
+  <p class="caption">연도별 수출액 $M(막대)과 건수(선). 출처: ITS 국제협력센터 공개 API, 2026-07-14 조회. 업계 자체 집계.</p>
   <div id="c-kr-service" class="chart"></div>
-  <p class="caption">서비스 분야별 누적 수출액 $M. 전자지불(AFC)이 압도한다.</p>
+  <p class="caption">서비스 분야별 누적 수출액 $M. 버스카드 같은 전자지불 시스템이 가장 크다.</p>
 </section>
 
 <section class="fade">
   <div class="sec-kicker">5 — 시사점</div>
-  <h2>양자 파이프라인에서 발굴하고, 일본을 봐야 한다</h2>
-  <p>ITS는 MDB 입찰로 안 열린다. 사업 발굴은 양자 원조 파이프라인(EDCF 후보 사업, 마스터플랜
-  단계)에서 해야 한다. 니치의 실경쟁자는 중국이 아니라 일본이다. 한국의 소프트 선행(마스터플랜·
-  표준)이 상업 구축 계약으로 이어지는 패턴인지가 다음 검증 과제다.</p>
+  <h2>사업은 원조 단계에서 만들어지고, 경쟁 상대는 일본이다</h2>
+  <p>ITS 사업은 국제개발은행 입찰장에 완성된 형태로 나오지 않는다. 사업 발굴은 그보다 앞선
+  정부 간 원조 단계 — EDCF 후보 사업, 마스터플랜 수립 — 에서 이뤄진다. 이 무대에서 실제로
+  마주치는 상대는 중국이 아니라 일본이다. 한국의 계획 수립이 이후 시스템 구축 계약으로
+  이어지는지가 다음 확인 과제로 남는다.</p>
 </section>
 
 <footer class="meth">
-  <div class="sec-kicker">방법론 · 정직성</div>
+  <div class="sec-kicker">확인 방법과 한계</div>
   <dl>
-    <dt>검증 체인</dt>
-    <dd>키워드 매칭 → 자동 오탐 필터(소유격 its, 항공·해상) → 전수 눈검증 → LLM 다각 교차판정
-    감사. 감사가 결과를 실제로 바꿨다: 최대 후보였던 아크라 건이 뒤집혔고(ITS 계약 취소 확인),
-    자동 필터가 떨군 진짜 ITS 4건이 복구됐다.</dd>
+    <dt>확인 절차</dt>
+    <dd>검색어로 후보를 모으고, 자동 필터로 오탐(영어 소유격 its, 항공·해상 관제)을 거른 뒤,
+    남은 건을 전부 눈으로 확인했다. 마지막으로 AI 교차검증을 한 번 더 거쳤고, 이 과정에서
+    결과가 실제로 바뀌었다. 가장 큰 후보였던 가나 아크라 사업은 ITS 계약이 취소된 사실이
+    확인돼 제외했고, 필터가 잘못 걸러냈던 사업 4건을 되살렸다.</dd>
     <dt>한계</dt>
-    <dd>MDB 검증은 ADB 단일 소스(WB 미완). CRS 행수는 신고 단위 차이로 방향만 읽는다. 키워드
-    정규식엔 리콜 구멍이 있다(감사로 3건 확인). ITS Korea 통계는 업계 자기신고·미감사.
-    AidData는 언론·공문서 기반이라 설명에 없는 컴포넌트는 못 본다.</dd>
+    <dd>국제개발은행 검증은 ADB 한 곳 기준이다(세계은행은 미확인). 원조 통계의 건수는
+    나라마다 신고 방식이 달라 추세 참고용이다. 검색어 방식은 다른 표현을 쓴 사업을 놓칠 수
+    있다(검증 중 3건 확인). 한국 수출실적은 업계 자체 집계다. 중국 데이터는 언론·공문서
+    기반이라 기록에 없는 내용은 담지 못한다.</dd>
     <dt>재현</dt>
-    <dd>모든 숫자는 공개 데이터에서 스크립트로 재현된다 —
-    <a href="https://github.com/PHONE-BOOT-H/intern-its-export-analysis">github.com/PHONE-BOOT-H/intern-its-export-analysis</a>
-    (notebooks/01–12). 이 페이지의 데이터도 notebooks/12가 굽는다.</dd>
+    <dd>모든 수치는 공개 데이터에서 코드로 재현할 수 있다 —
+    <a href="https://github.com/PHONE-BOOT-H/intern-its-export-analysis">github.com/PHONE-BOOT-H/intern-its-export-analysis</a>.
+    이 페이지의 수치도 같은 저장소의 스크립트로 생성했다.</dd>
     <dt>출처</dt>
     <dd>ADB procurement 공개 파일 · OECD CRS · AidData GCDF 3.0 · ITS 국제협력센터
     수출통계(intl.its.go.kr, 2026-07-14 조회).</dd>
@@ -274,11 +286,12 @@ CH.projects.forEach(p=>{
 });
 CH.pledge.forEach(p=>{
   cards.insertAdjacentHTML('beforeend',
-    `<div class="card dead"><div class="t">${p.rec} · ${p.year}</div>${p.title} — pledge 미이행</div>`);
+    `<div class="card dead"><div class="t">${p.rec} · ${p.year}</div>${p.title}</div>`);
 });
 cards.insertAdjacentHTML('beforeend',
-  `<div class="card dead"><div class="t">가나 · 2019</div>아크라 지능형 교통관리 — CDB 차관 $210.6M(명목) 중
-  유일한 ITS 계약($100M)을 가나 정부가 취소, 국제중재행. 잔여는 도로 토목.</div>`);
+  `<div class="card dead"><div class="t">가나 · 2019</div>아크라 지능형 교통관리 사업 —
+  차관 $210.6M 중 유일한 ITS 계약($100M)이 취소돼 국제 중재로 넘어갔다. 남은 돈은 도로
+  확장에 쓰였다.</div>`);
 
 // 4. 한국 실측
 Plotly.newPlot('c-kr-annual', [

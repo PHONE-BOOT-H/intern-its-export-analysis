@@ -89,15 +89,23 @@ assert crs_data['total_rows'] == 164 and crs_data['pivot']['한국'] == [3, 4, 4
 aid = pd.read_csv('data/processed/aiddata_its_review.csv', encoding='utf-8-sig')
 ao = aid[aid['판정'] == 'O']
 agg_yes = ao['Recommended For Aggregates'].astype(str).str.strip() == 'Yes'
-proj = lambda r: {'year': int(r['Commitment Year']), 'rec': str(r['Recipient']),
+REC_KO = {'Moldova': '몰도바', 'Liberia': '라이베리아', 'Nigeria': '나이지리아',
+          'Belarus': '벨라루스', 'Ghana': '가나'}
+TITLE_KO = {66233: '키시나우 주요 교차로 도로감시 시스템 설치 (EUR 3M 무상원조)',
+            66237: '키시나우 41개 교차로 영상감시·교통관제센터 구축 (RMB 30M 무상원조)',
+            1799: '몬로비아 태양광 신호등 19기 설치 (RMB 50M 무상원조 연계)',
+            52632: '아부자 태양광 교통신호 시스템 2단계 (RMB 1.2M 무상원조)',
+            49039: '민스크 지능형교통시스템 차관 $102M — 약속 단계에서 중단'}
+proj = lambda r: {'year': int(r['Commitment Year']),
+                  'rec': REC_KO.get(str(r['Recipient']), str(r['Recipient'])),
                   'amt_m': None if pd.isna(r['Amount (Constant USD 2021)'])
                   else round(r['Amount (Constant USD 2021)'] / 1e6, 1),
-                  'title': str(r['Title'])}
+                  'title': TITLE_KO.get(int(r['AidData Record ID']), str(r['Title']))}
 china = {
-    'funnel': [{'label': '교통 부문 사업 (2000~2021)', 'n': 1665},
-               {'label': '키워드·스윕 검토', 'n': int(len(aid))},
-               {'label': '눈검증 + LLM 3심 감사 후 ITS 성격', 'n': int(len(ao))},
-               {'label': '집계되는 ITS (pledge 제외)', 'n': int(agg_yes.sum())}],
+    'funnel': [{'label': '중국이 지원한 개도국 교통사업 (2000~2021)', 'n': 1665},
+               {'label': '검색어와 전수 확인으로 추린 후보', 'n': int(len(aid))},
+               {'label': '수작업·교차 검증을 통과한 ITS 사업', 'n': int(len(ao))},
+               {'label': '실제 집행된 ITS 사업 — 약속 단계에서 멈춘 1건 제외', 'n': int(agg_yes.sum())}],
     'projects': [proj(r) for _, r in ao[agg_yes].sort_values('Commitment Year').iterrows()],
     'pledge': [proj(r) for _, r in ao[~agg_yes].iterrows()],
     'impl_amt_m': round(ao.loc[agg_yes, 'Amount (Constant USD 2021)'].sum() / 1e6, 1),
