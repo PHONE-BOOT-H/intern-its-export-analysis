@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한국 ITS 수출, 싸울 곳은 어디인가</title>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
+<script src="data.js"></script>
+<style>
+  :root { --ink:#1a1a2e; --sub:#5b6270; --accent:#0f4c81; --accent2:#c0392b;
+          --line:#e3e6ea; --bg:#ffffff; --soft:#f6f8fa; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+         line-height:1.7; font-size:16.5px; }
+  main { max-width:820px; margin:0 auto; padding:0 20px 80px; }
+  h1 { font-size:34px; line-height:1.3; margin:70px 0 8px; letter-spacing:-.5px; }
+  h2 { font-size:23px; margin:70px 0 6px; letter-spacing:-.3px; }
+  h2 .no { color:var(--accent); margin-right:8px; }
+  p  { margin:14px 0; }
+  .sub { color:var(--sub); }
+  .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:34px 0 10px; }
+  .kpi { background:var(--soft); border:1px solid var(--line); border-radius:10px; padding:18px 16px; }
+  .kpi .num { font-size:30px; font-weight:800; color:var(--accent); letter-spacing:-1px; }
+  .kpi .lab { font-size:13.5px; color:var(--sub); margin-top:4px; }
+  .chart { margin:22px 0 6px; }
+  .caption { font-size:13px; color:var(--sub); margin:2px 0 0; }
+  .toggle { display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; margin:16px 0 0; }
+  .toggle button { border:0; background:var(--bg); padding:8px 16px; font-size:14px; cursor:pointer; color:var(--sub); }
+  .toggle button.on { background:var(--accent); color:#fff; }
+  .funnel-step { min-height:52vh; display:flex; flex-direction:column; justify-content:center; opacity:.25; transition:opacity .5s; }
+  .funnel-step.active { opacity:1; }
+  .funnel-step .big { font-size:72px; font-weight:900; letter-spacing:-3px; color:var(--ink); line-height:1; }
+  .funnel-step.last .big { color:var(--accent2); font-size:120px; }
+  .funnel-step .lab { font-size:17px; color:var(--sub); margin-top:10px; }
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0; }
+  .card { border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:14px; }
+  .card .t { font-weight:700; margin-bottom:4px; }
+  .card.dead { background:var(--soft); color:var(--sub); }
+  .card.dead .t::after { content:" — 무산"; color:var(--accent2); }
+  .note { background:var(--soft); border-left:3px solid var(--accent); padding:12px 16px;
+          font-size:14.5px; margin:20px 0; border-radius:0 8px 8px 0; }
+  footer.meth { border-top:1px solid var(--line); margin-top:80px; padding-top:30px; font-size:14px; color:var(--sub); }
+  footer.meth h2 { font-size:18px; color:var(--ink); margin-top:0; }
+  footer.meth li { margin:6px 0; }
+  a { color:var(--accent); }
+  @media (max-width:640px){ .kpis,.cards{grid-template-columns:1fr;} h1{font-size:27px;}
+    .funnel-step .big{font-size:52px;} .funnel-step.last .big{font-size:84px;} }
+</style>
+</head>
+<body>
+<main>
+
+<h1>한국 ITS 수출, 싸울 곳은 MDB 입찰장이 아니라 양자 채널이다</h1>
+<p class="sub">공개 데이터 4개 층(ADB 낙찰 · OECD CRS · AidData 중국 · ITS Korea 실적)으로 재현 가능하게 증명한다.
+검증은 ADB 낙찰 기준(WB 교차확인 미완).</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="num" id="kpi1"></div><div class="lab">ADB 교통관리 니치에서 ITS 키워드로 잡히는 낙찰 (works 0건)</div></div>
+  <div class="kpi"><div class="num" id="kpi2"></div><div class="lab">CRS 양자 원조 10년(2014~23) 한국 ITS 신고 행수 — 2018년 이후 매년 최다</div></div>
+  <div class="kpi"><div class="num" id="kpi3"></div><div class="lab">중국이 22년간 실제 집계한 ITS 사업 (교통 1,665건 중)</div></div>
+</div>
+
+<h2><span class="no">1</span>MDB 입찰장: 한국은 강하지만, ITS가 없다</h2>
+<p>ADB 교통 낙찰(계약일 2016.1~2026.5)을 국적별로 모으면 첫 착시가 나온다.
+낙찰의 <b>59.6%는 등록국=사업국인 안방 계약</b>이다. 안방을 걷어내면 순수 수출 리그가 남는다
+— 중국이 절반, <b>한국이 2위($2.55B, 18.2%)</b>다. 아래 토글로 직접 확인.</p>
+<div class="toggle" id="tg1">
+  <button data-v="all" class="on">전체 낙찰</button>
+  <button data-v="export">안방 제거 (순수 수출)</button>
+</div>
+<div id="c-adb" class="chart"></div>
+<p class="caption">ADB 교통 부문 낙찰, ADB 재원 금액 기준 상위 10개 등록국. 출처: ADB procurement 공개 데이터.</p>
+<p>그런데 한국이 잘 싸우는 이 시장에 ITS가 없다. 교통관리·신호류 서브섹터 636건은 금액의
+86%가 도로공사(works)이고, 낙찰 건명에 ITS 키워드가 걸리는 계약은 <b>24건 — 전부 컨설팅·장비,
+works 0건</b>이다. ADB에서 ITS는 독립 시스템 패키지로 발주되지 않는다.</p>
+<div class="note">"ITS가 없다"가 아니라 "이 방법으로는 안 보인다"다. ITS는 MDB 도로사업 안에
+컴포넌트(신호·관제·요금징수)로 묻혀 들어가는 경우가 많아 낙찰 건명 키워드로는 원래 안 잡힌다.</div>
+
+<h2><span class="no">2</span>양자 채널: ITS가 실명으로 있고, 한국이 최다</h2>
+<p>OECD CRS(양자 원조 신고)의 교통 부문 2014~2023년 10년에서 ITS 사업을 찾았다.
+키워드 후보 1,031행을 자동 오탐 필터와 전수 눈검증으로 걸러 <b>164행(고유 사업 66건)</b>을 확정했다.
+한국은 2018년 이후 매년 행수 최다다.</p>
+<div id="c-crs-heat" class="chart"></div>
+<p class="caption">연도 × 공여국 CRS 신고 행수(확정분). 소수 공여국 생략: EU 3행, 영국 1행. 행수는 신고 단위라 방향만 읽는다.</p>
+<p>금액은 반대다. 10년 약정 <b>일본 $163M vs 한국 $37M</b>. 한국은 다건·소액(마스터플랜·연수·기술지원),
+일본은 소건·대액(고속도로 ITS 차관)이다.</p>
+<div id="c-crs-amt" class="chart"></div>
+<p class="caption">공여국별 10년 합계: 신고 행수(막대, 좌축) vs 약정액 $M(점, 우축). 독일 $209M은 산시성 1건($189M)이 지배.</p>
+
+<h2><span class="no">3</span>중국: BRI 교통 재원에 집계되는 ITS는 사실상 없다</h2>
+<p>CRS엔 중국이 없다. AidData(중국 해외개발금융 2000~2021)의 교통 부문에 같은 기준을 적용하고,
+키워드가 못 잡는 어휘까지 전수 스윕으로 감사했다. 스크롤로 내려가며 좁혀보자.</p>
+<div id="funnel"></div>
+<p>이행된 4건은 전부 소액 그랜트(합계 $12.6M, 2021년 불변가), 성격은 CCTV·감시형이다.
+대형 시도 2건은 둘 다 무산됐다 — "중국과 ITS에서 부딪힌다"는 걱정은 2021년까지의 이행
+데이터에서는 뒷받침되지 않는다.</p>
+<div class="cards" id="china-cards"></div>
+
+<h2><span class="no">4</span>한국 실측: 원조는 소프트, 실적은 하드</h2>
+<p>ITS Korea(ITS 국제협력센터) 수출통계 — 상업 계약 포함 <b>2006~2025 누적 687건, $1.98B, 77개국</b>.
+금액의 94.8%가 구축사업(하드)이다. CRS에서 한국이 소프트(계획·표준·연수)로 잡히는 것과 대비된다:
+원조 채널과 상업 채널이 분업하고 있을 가능성(추측 — 사례 추적 전).</p>
+<div id="c-kr-annual" class="chart"></div>
+<p class="caption">연도별 수출액 $M(막대)과 건수(선). 출처: ITS 국제협력센터 공개 API, 2026-07-14 조회.</p>
+<div id="c-kr-service" class="chart"></div>
+<p class="caption">서비스 분야별 누적 수출액. 전자지불(AFC)이 압도.</p>
+
+<h2><span class="no">5</span>시사점</h2>
+<p>ITS는 MDB 입찰로 안 열린다. 사업 발굴은 양자 원조 파이프라인(EDCF 후보 사업, 마스터플랜
+단계)에서 해야 한다. 니치의 실경쟁자는 중국이 아니라 일본이다. 한국의 소프트 선행(마스터플랜·표준)이
+상업 구축 계약으로 이어지는 패턴인지가 다음 검증 과제다.</p>
+
+<footer class="meth">
+<h2>방법론 · 정직성</h2>
+<ul>
+  <li><b>검증 체인</b>: 키워드 매칭 → 자동 오탐 필터(소유격 its, 항공·해상) → 전수 눈검증 → LLM 다각 교차판정 감사. 감사가 결과를 실제로 바꿨다: 최대 후보였던 아크라 건이 뒤집혔고(ITS 계약 취소 확인), 자동 필터가 떨군 진짜 ITS 4건이 복구됐다.</li>
+  <li><b>한계</b>: MDB 검증은 ADB 단일 소스(WB 미완). CRS 행수는 신고 단위 차이로 방향만 읽는다. 키워드 정규식엔 리콜 구멍이 있다(감사로 3건 확인). ITS Korea 통계는 업계 자기신고·미감사. AidData는 언론·공문서 기반이라 설명에 없는 컴포넌트는 못 본다.</li>
+  <li><b>재현</b>: 모든 숫자는 공개 데이터에서 스크립트로 재현된다 — <a href="https://github.com/PHONE-BOOT-H/intern-its-export-analysis">github.com/PHONE-BOOT-H/intern-its-export-analysis</a> (notebooks/01~12). 이 페이지의 데이터도 notebooks/12가 굽는다.</li>
+  <li><b>출처</b>: ADB procurement 공개 파일 · OECD CRS · AidData GCDF 3.0 · ITS 국제협력센터 수출통계(intl.its.go.kr, 2026-07-14 조회).</li>
+</ul>
+</footer>
+
+</main>
+<script>
+const A = DATA.adb, C = DATA.crs, CH = DATA.china, K = DATA.korea;
+const F = {family:"Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif", size:13, color:'#1a1a2e'};
+const L = {font:F, margin:{l:110,r:20,t:10,b:40}, paper_bgcolor:'#fff', plot_bgcolor:'#fff'};
+const CFG = {displayModeBar:false, responsive:true};
+
+document.getElementById('kpi1').textContent = A.kw24.n + '건 / 636건';
+document.getElementById('kpi2').textContent = C.totals.find(t=>t.donor==='한국').rows + '행';
+document.getElementById('kpi3').textContent = CH.funnel[3].n + '건';
+
+// P1: ADB 리그 (토글)
+function adbTrace(rows){
+  const r = rows.slice().reverse();
+  return [{type:'bar', orientation:'h', y:r.map(d=>d.nat), x:r.map(d=>d.amt_m),
+    text:r.map(d=>d.share+'%'), textposition:'outside', cliponaxis:false,
+    marker:{color:r.map(d=>d.nat==='한국' ? '#0f4c81' : (d.nat==='중국' ? '#c0392b' : '#c9d2dc'))}}];
+}
+function drawAdb(v){
+  Plotly.react('c-adb', adbTrace(v==='all'?A.league_all:A.league_export),
+    {...L, height:380, xaxis:{title:{text:'ADB 재원 $M', font:F}, gridcolor:'#eef1f4'}, yaxis:{automargin:true}}, CFG);
+}
+drawAdb('all');
+document.querySelectorAll('#tg1 button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tg1 button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); drawAdb(b.dataset.v);
+});
+
+// P2: CRS 히트맵 + 행수vs금액
+Plotly.newPlot('c-crs-heat', [{type:'heatmap', x:C.years, y:C.donors.slice().reverse(),
+  z:C.donors.slice().reverse().map(d=>C.pivot[d]),
+  colorscale:[[0,'#f6f8fa'],[1,'#0f4c81']], showscale:false,
+  texttemplate:'%{z}', textfont:{size:12}}],
+  {...L, height:260, margin:{l:70,r:20,t:10,b:40}, xaxis:{dtick:1}, yaxis:{automargin:true}}, CFG);
+
+const T = C.totals.filter(t=>C.donors.includes(t.donor));
+Plotly.newPlot('c-crs-amt', [
+  {type:'bar', x:T.map(t=>t.donor), y:T.map(t=>t.rows), name:'행수', marker:{color:'#c9d2dc'}},
+  {type:'scatter', mode:'markers', x:T.map(t=>t.donor), y:T.map(t=>t.commit_m), name:'약정 $M',
+   yaxis:'y2', marker:{size:14, color:'#c0392b'}}],
+  {...L, height:320, margin:{l:50,r:50,t:10,b:40}, legend:{orientation:'h', y:1.1},
+   yaxis:{title:{text:'행수',font:F}, gridcolor:'#eef1f4'},
+   yaxis2:{title:{text:'약정 $M',font:F}, overlaying:'y', side:'right'}}, CFG);
+
+// P3: 깔때기 스크롤
+const fu = document.getElementById('funnel');
+CH.funnel.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className = 'funnel-step' + (i===CH.funnel.length-1?' last':'');
+  d.innerHTML = `<div class="big">${s.n.toLocaleString()}</div><div class="lab">${s.label}</div>`;
+  fu.appendChild(d);
+});
+const io = new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('active', e.isIntersecting)), {threshold:.5});
+document.querySelectorAll('.funnel-step').forEach(el=>io.observe(el));
+
+const cards = document.getElementById('china-cards');
+CH.projects.forEach(p=>{
+  cards.insertAdjacentHTML('beforeend',
+    `<div class="card"><div class="t">${p.rec} ${p.year}</div>${p.title}${p.amt_m?` — $${p.amt_m}M`:''}</div>`);
+});
+CH.pledge.forEach(p=>{
+  cards.insertAdjacentHTML('beforeend',
+    `<div class="card dead"><div class="t">${p.rec} ${p.year}</div>${p.title} (pledge 미이행)</div>`);
+});
+cards.insertAdjacentHTML('beforeend',
+  `<div class="card dead"><div class="t">가나 2019</div>아크라 지능형 교통관리 — CDB 차관 $210.6M(명목) 중 유일한 ITS 계약($100M)을 가나 정부가 취소, 국제중재행. 잔여는 도로 토목.</div>`);
+
+// P4: 한국 실측
+Plotly.newPlot('c-kr-annual', [
+  {type:'bar', x:K.annual.map(r=>r.y), y:K.annual.map(r=>r.amt_m), name:'수출액 $M', marker:{color:'#0f4c81'}},
+  {type:'scatter', mode:'lines+markers', x:K.annual.map(r=>r.y), y:K.annual.map(r=>r.cnt), name:'건수',
+   yaxis:'y2', line:{color:'#c0392b'}}],
+  {...L, height:320, margin:{l:60,r:50,t:10,b:40}, legend:{orientation:'h', y:1.1},
+   yaxis:{title:{text:'$M',font:F}, gridcolor:'#eef1f4'}, yaxis2:{title:{text:'건수',font:F}, overlaying:'y', side:'right'}}, CFG);
+
+const sv = K.service.slice().reverse();
+Plotly.newPlot('c-kr-service', [{type:'bar', orientation:'h', y:sv.map(r=>r.k), x:sv.map(r=>r.amt_m),
+  text:sv.map(r=>r.cnt+'건'), textposition:'outside', cliponaxis:false,
+  marker:{color:sv.map(r=>r.k.includes('전자지불')?'#0f4c81':'#c9d2dc')}}],
+  {...L, height:300, xaxis:{title:{text:'누적 수출액 $M',font:F}, gridcolor:'#eef1f4'}, yaxis:{automargin:true}}, CFG);
+</script>
+</body>
+</html>
