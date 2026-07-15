@@ -43,19 +43,10 @@ def league(df, title, n=12):
 league(tr, '교통 낙찰 국적 리그 TOP12 (안방 포함)')
 league(tr[~tr['is_domestic']], '안방 제거 = 순수 수출 리그 TOP12')
 
-# (3) ITS 키워드 깔때기 — 09와 동일 규칙
-ITS_RE = re.compile(
-    r'\bintelligent transport|\bITS\b|\bC-ITS\b|\bV2X\b|\btraffic management|'
-    r'\btraffic signal|\btraffic control|\bATMS\b|\belectronic toll|\btolling\b|'
-    r'\bsmart mobility|\bsmart traffic|\bvariable message|\bvehicle detection|'
-    r'\bincident management|\bATC\b|\badaptive signal', re.IGNORECASE)
-NON_ITS_RE = re.compile(ITS_RE.pattern.replace(r'\bITS\b|', ''), re.IGNORECASE)
-UPPER_ITS = re.compile(r'\bITS\b')
-AIR_SEA_RE = re.compile(
-    r'\bair.traffic|\baviation\b|\bairport|\bairspace|\bmaritime\b|\bmarine\b|'
-    r'\bvessel traffic|\bport authority|\bharbou?r\b|\brailway signal', re.IGNORECASE)
-# 대문자 소유격: "... AND ITS ROAD/APPROACHES/..." 처럼 ITS 뒤에 소유 대상 명사만 오는 건 오탐
-POSS_UPPER = re.compile(r'\bITS\s+(?:road|approach|approaches|own|respective|components?|tributar)', re.IGNORECASE)
+# (3) ITS 키워드 깔때기 — 정규식은 src/its_filter 단일 소스(테스트와 공유, 조용히 안 깨지게)
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from src.its_filter import ITS_RE, NON_ITS_RE, UPPER_ITS, AIR_SEA_RE, POSS_UPPER
 
 blob = (tr['contract_description'].fillna('') + ' ' + tr['project_name'].fillna(''))
 hit = tr[blob.str.contains(ITS_RE, na=False)].copy()
