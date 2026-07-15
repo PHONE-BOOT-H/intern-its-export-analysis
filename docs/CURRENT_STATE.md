@@ -5,17 +5,19 @@
 ## 마지막 업데이트
 2026-07-15. 브리프 최종화 + 대시보드 배포. 초안 스캐폴딩 제거하고 검증 스윕(에이전트 5개가 notebooks 직접 실행해 헤드라인 숫자 전수 대조 — 전부 재현됨)으로 결함 5개 수정: CRS 2022 깔때기 27→32(풀 50, 확정 18), 미국 주도 "2014~17"→"2014~15"(표가 반증), ITS Korea 77개국→75(2곳은 지역·기구), 과장어(강국·압도적으로) 제거. `reports/brief_draft.md`→`reports/brief.md` 리네임. 대시보드 GitHub Pages 배포: https://phone-boot-h.github.io/intern-its-export-analysis/dashboard/ (스크롤 리빌 애니메이션이라 정적 캡처엔 빈칸으로 보이지만 실사용 정상 — 스크롤 후 opacity:0 요소 0개 확인).
 
+2026-07-15 (이어서). [구멍1] WB 낙찰 교차확인 완료. World Bank IPF 교통 낙찰(Finances One DS01693, FY2020~27, 32,598건, CC BY 4.0)을 SQL API로 수집(notebooks/13 — API가 datasetId/resourceId GET 아니라 apiservice/sql POST, assetId=DS00005, playwright로 실제 요청 관찰해 알아냄), ADB 파이프라인 복제(14). 안방 58.3%·수출 중국 56%·한국 12위(1.0% $143M)로 ADB 무늬 재현. **반전**: ADB와 달리 WB엔 실명 ITS가 발주됨 — 후보 154(키워드66+거짓음성88)를 opus 2독립렌즈 교차판정+불일치 재판정 → 확정 21프로젝트 $117M(판정 52 O-id는 notebooks/15에 고정). 근데 **중국 71%($84M, 에티오피아 편중)·한국 $0.3M(컨설팅 2건)로 사실상 부재**. → 브리프 1절/주장/5절 개정: "MDB엔 ITS 없다"(약함) → "MDB ITS는 작고 중국이 먹고 한국 부재"(강함). 논지 유지·강화. 브리프·대시보드 반영, 2에이전트 재검증(숫자 9/10 정확 — FY2020~27 라벨·2절 ADB 스코프·5절 표본 캐비엇 3개 수정).
+
 2026-07-14. [구멍4] AidData 중국 ITS 완료 — 교통 1,665건 중 이행된 ITS는 소액 그랜트 4건뿐, 대형 시도 2건(민스크 $102M pledge, 아크라 ITS 계약 $100M)은 무산. LLM 3심 교차판정 + 1,665건 전수 스윕으로 감사(아크라 O→X 뒤집힘, 거짓음성 4건 복구). 데이터 층 전부 완성.
 
 ## ◆ 지금 방향 (매 세션 이것부터 확인 — 어긋나면 멈춤)
 - **주장**: 한국 ITS 수출은 MDB 입찰이 아니라 양자 채널(EDCF·BRI·JICA)에서 싸워야 한다.
-- **지금 단계**: 핵심 산출물 완료 — 브리프 최종본(`reports/brief.md`) + 대시보드 배포(GitHub Pages). 남은 건 전부 옵션(WB·사례).
-- **다음 마일스톤**: (옵션) WB 낙찰 교차확인, 사례 1~2건 추적. 안 해도 결론은 선다.
+- **지금 단계**: 핵심 산출물 + WB 교차확인까지 완료. 브리프 최종본(`reports/brief.md`, WB 통합)·대시보드 배포. 남은 건 사례 추적(옵션)뿐.
+- **다음 마일스톤**: (옵션) 사례 1~2건 추적. 안 해도 결론은 선다.
 
 ## ▶ 다음 세션 여기부터 (ㄱㄱ 하면 이걸 먼저)
-핵심 2개(브리프·대시보드) 끝. 남은 건 전부 옵션이라 안 해도 산출물은 선다.
-1. (옵션) [구멍1] WB 낙찰 교차확인 — financesone DS01693 벌크다운로드. 브리프 "MDB"를 ADB 너머로 일반화.
-2. (옵션) [구멍6] 사례 1~2건 추적(자카르타·방글라데시) — 4절 소프트→하드 분업 가설 확증.
+핵심(브리프·대시보드)·ADB·CRS·중국·WB 다 끝. 남은 건 전부 옵션.
+1. (옵션) [구멍6] 사례 1~2건 추적(자카르타·방글라데시) — 4절 소프트→하드 분업 가설 확증.
+2. (선택) 대시보드에 WB 층 차트 추가 — 지금은 1절 캐비엇 프로즈로만 반영됨. 데이터는 notebooks/15.
 3. (선택) 대시보드 리빌 애니메이션 no-JS 폴백 — JS 꺼지면 빈 화면 되는 것 방지. 우선순위 낮음.
 
 07-14 완료: [구멍4] AidData 중국(이행 ITS 4건), [구멍5] ITS Korea 대시보드 = 공개 JSON API 확인·캐시·재현(notebooks/11, 출처표기 인용 가능·KOGL 미표기라 재배포 지양), [구멍0] ADB 기간 실측 2016.1~2026.5(브리프의 2006~2025 오류 수정).
@@ -69,12 +71,16 @@
 - `notebooks/08` CRS 10년 표 재현 (연도x공여국, 합계, 연수 제외)
 - `notebooks/09` AidData 중국 교통(210) ITS 추출 + 자동필터 (덮어쓰기 가드)
 - `notebooks/10` AidData 중국 ITS 최종표 재현 (이행 vs pledge 분리)
+- `notebooks/13` WB IPF 교통 낙찰 수집 (Finances One SQL API, assetId=DS00005, 32,598건→parquet 캐시)
+- `notebooks/14` WB 국적 리그 + 안방/수출 + ITS 키워드 깔때기 + 거짓음성 프로브 (리뷰 CSV 생성)
+- `notebooks/15` WB ITS 판정 최종표 (교차판정 확정 21프로젝트 $117M, 중국 71%·한국 부재)
 
 ## 다음 할 일
 - [x] CRS 다년 확장 + 눈검증 (07-13 완료)
 - [x] AidData 중국 층 (07-14 완료 — 이행 ITS 4건뿐)
-- [ ] 브리프 최종 다듬기 + 보조 확인([구멍5]·[구멍0])
-- [ ] WB 낙찰 합치기 (financesone DS01693, 벌크다운로드) — 여유되면
+- [x] 브리프 최종화 + 대시보드 배포 (07-15)
+- [x] WB 낙찰 교차확인 (07-15 — WB엔 ITS 있으나 중국 71%·한국 부재, 브리프 통합)
+- [ ] (옵션) 사례 1~2건 추적
 
 ## 데이터 (data/raw, 전부 공개 오픈데이터)
 - `adb_procurement_by_nationality.xlsx` / `adb_procurement_by_origin.xlsx` — ADB 낙찰
@@ -82,7 +88,7 @@
 - `crs_2022.parquet/` — OECD CRS 양자 원조 2022 (oda_reader `download_crs_file(2022)`)
 - `itskorea_dashboard/*.json` — ITS 국제협력센터 수출통계 공개 API 캐시 (notebooks/11, 2026-07-14 조회)
 - `crs_2014.parquet` ~ `crs_2023.parquet` — CRS 다년치 (oda_reader)
-- 아직 없음: WB 낙찰
+- `wb_transport_awards.parquet` — WB IPF 교통 낙찰 32,598건 (Finances One DS01693, apiservice/sql, notebooks/13 캐시, CC BY 4.0)
 - `회원사들 정리.docx`(gitignore) — 한태영이 직접 정리한 IT/AI 기업 일부 리스트(전체 회원DB 아님). 나중에 낙찰데이터의 한국 기업 매칭에 쓸 수 있음 → 쓰려면 CSV로 변환.
 
 ## 막힌 곳 / 기각
