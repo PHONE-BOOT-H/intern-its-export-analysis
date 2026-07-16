@@ -9,10 +9,13 @@ CRS와 같은 키워드·제외 규칙(07과 동일)을 교통 부문(Sector Cod
 """
 import io
 import os
-import re
+import sys
 import zipfile
 
 import pandas as pd
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from src.its_filter import ITS_RE, NON_ITS_RE, UPPER_ITS, AIR_SEA_RE
 
 XLSX = ('AidDatas_Global_Chinese_Development_Finance_Dataset_Version_3_0/'
         'AidDatasGlobalChineseDevelopmentFinanceDataset_v3.0.xlsx')
@@ -31,18 +34,7 @@ else:
 print('GCDF 교통(210):', len(tr), '행 | 약정연도',
       int(tr['Commitment Year'].min()), '~', int(tr['Commitment Year'].max()))
 
-# 07과 동일 규칙
-ITS_RE = re.compile(
-    r'\bintelligent transport|\bITS\b|\bC-ITS\b|\bV2X\b|\btraffic management|'
-    r'\btraffic signal|\btraffic control|\bATMS\b|\belectronic toll|\btolling\b|'
-    r'\bsmart mobility|\bsmart traffic|\bvariable message|\bvehicle detection|'
-    r'\bincident management|\bATC\b|\badaptive signal', re.IGNORECASE)
-NON_ITS_RE = re.compile(ITS_RE.pattern.replace(r'\bITS\b|', ''), re.IGNORECASE)
-UPPER_ITS = re.compile(r'\bITS\b')
-AIR_SEA_RE = re.compile(
-    r'\bair.traffic|\baviation\b|\bairport|\bairspace|\bmaritime\b|\bmarine\b|'
-    r'\bvessel traffic|\bport authority|\bharbou?r\b|\brailway signal', re.IGNORECASE)
-
+# 규칙은 src/its_filter 단일 소스 (07의 2022 동결본과 달리 air-traffic 하이픈·marine 포함 최신판)
 blob = tr[['Title', 'Description']].fillna('').agg(' '.join, axis=1)
 hit = tr[blob.str.contains(ITS_RE, na=False)].copy()
 hb = blob[hit.index]

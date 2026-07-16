@@ -27,6 +27,7 @@ trb_blob = tr_blob[trb.index]
 print('교통 양자만:', len(trb), '행')
 
 # ITS 키워드 (짧은 토큰은 단어경계로 오탐 방지)
+# 2022 타당성 탐색 당시 버전으로 동결 — 브리프의 "키워드 115건" 재현용. 새 층은 src/its_filter를 쓸 것.
 ITS_RE = re.compile(
     r'\bintelligent transport|\bITS\b|\bC-ITS\b|\bV2X\b|\btraffic management|'
     r'\btraffic signal|\btraffic control|\bATMS\b|\belectronic toll|\btolling\b|'

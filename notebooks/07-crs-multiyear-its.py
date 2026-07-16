@@ -13,6 +13,9 @@ YEARS = range(2014, 2024)
 TXT = ['ProjectTitle', 'ShortDescription', 'LongDescription', 'Keywords']
 KEEP = TXT + ['Year', 'DonorName', 'RecipientName', 'USD_Commitment', 'USD_Disbursement']
 
+# 주의: 이 정규식은 2022~10년 눈검증 당시 버전으로 동결한다 (air-traffic 하이픈·marine
+# 누락 구멍은 리뷰 CSV에서 수동 보정됨). src/its_filter의 최신판으로 갈면 자동필터
+# 숫자(소유격 564/항공해상 191)가 바뀌어 문서·판정 파일 재현이 깨진다. 새 층은 src를 쓸 것.
 ITS_RE = re.compile(
     r'\bintelligent transport|\bITS\b|\bC-ITS\b|\bV2X\b|\btraffic management|'
     r'\btraffic signal|\btraffic control|\bATMS\b|\belectronic toll|\btolling\b|'
